@@ -92,4 +92,4 @@ class TSService {
 
 }
 
-export = TSService;
+export default TSService;
