@@ -1,6 +1,6 @@
 {
   "name": "tsserver-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "dependencies": {
     "es6-promise": "^3.1.2",
