@@ -1,0 +1,21 @@
+{
+  "name": "tsserver-client",
+  "version": "0.0.2",
+  "description": "",
+  "dependencies": {
+    "es6-promise": "^3.1.2",
+    "rxjs": "^5.0.0-beta.2"
+  },
+  "scripts": {
+    "build": "rimraf lib typings && typings install && tsc",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "bin/tsserver-ws.js",
+  "typings": "lib/TSService.d.ts",
+  "author": {
+    "email": "zojeda@gmail.com",
+    "name": "Zacarias F. Ojeda"
+  },
+  "license": "ISC"
+}

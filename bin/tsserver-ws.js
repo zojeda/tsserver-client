@@ -1,0 +1,1 @@
+require('./tsserver-ws-server/tsserver-ws')

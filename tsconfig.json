@@ -1,0 +1,15 @@
+{
+	"version": "1.8.0",
+	"compilerOptions": {
+		"module": "commonjs",
+		"outDir": "lib",
+		"sourceMap": true,
+		"declaration": true
+	},
+	"exclude": [
+    "typings/browser.d.ts",
+    "typings/browser",
+		"node_modules",
+		"sample" 
+    ]
+}

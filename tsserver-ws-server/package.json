@@ -1,0 +1,14 @@
+{
+  "name": "tssever-ws",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/tsserver-ws.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodejs-websocket": "^1.5.0"
+  }
+}
