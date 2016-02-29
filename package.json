@@ -11,7 +11,8 @@
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": "bin/tsserver-ws.js",
+  "main": "./lib/TSService.js",
+  "bin": "./bin/tsserver-ws.js",
   "typings": "lib/TSService.d.ts",
   "author": {
     "email": "zojeda@gmail.com",
