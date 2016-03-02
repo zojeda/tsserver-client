@@ -2,14 +2,18 @@
 	"version": "1.8.0",
 	"compilerOptions": {
 		"module": "commonjs",
+		"target": "ES5",
 		"outDir": "lib",
 		"sourceMap": true,
-		"declaration": true
+		"declaration": true,
+		"diagnostics": true,
+		"watch": true
 	},
 	"exclude": [
     "typings/browser.d.ts",
     "typings/browser",
 		"node_modules",
+		"lib",
 		"sample" 
     ]
 }

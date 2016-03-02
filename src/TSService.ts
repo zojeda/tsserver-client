@@ -72,8 +72,8 @@ class TSService {
 			}
 		};
 
-		this.connection.sendRequestResp(geterrRequest);
-		return this.connection.diagnosticSuject.asObservable();
+		this.connection.sendRequest(geterrRequest);
+		return this.connection.semanticEventsSuject.asObservable();
 	}
 
 	exit() {

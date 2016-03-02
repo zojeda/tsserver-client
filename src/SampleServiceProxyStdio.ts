@@ -2,7 +2,7 @@ import TSService from "./TSService";
 
 
 TSService.connect("stdio", (tsservice) => {
-    let fileName = __dirname + "/../sample/Test.ts";
+    let fileName = __dirname + "/../../sample/Test.ts";
 	tsservice.open(fileName);
 	tsservice.projectInfo(fileName, true)
 		// .then(console.log);
