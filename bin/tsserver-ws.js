@@ -1,1 +1,2 @@
-require('./tsserver-ws-server/tsserver-ws')
+#!/usr/bin/node
+require('../tsserver-ws-server/tsserver-ws')

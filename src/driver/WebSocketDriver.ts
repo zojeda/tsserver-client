@@ -1,6 +1,7 @@
-export default class WebSocketDriver implements IDriver {
+class WebSocketDriver implements IDriver {
 	ws: WebSocket;
 	connect(done) {
+		console.log("connecting using websockets");
 		this.ws = new WebSocket("ws://localhost:8001");
 		this.ws.onopen = () => done();
 	}
@@ -11,3 +12,5 @@ export default class WebSocketDriver implements IDriver {
 		this.ws.send(message);
 	}
 }
+
+export = WebSocketDriver;

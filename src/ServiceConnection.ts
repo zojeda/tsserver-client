@@ -94,4 +94,4 @@ class ServiceConnection {
   semanticEventsSuject = new Subject<ts.server.protocol.Diagnostic[]>();
 }
 
-export default ServiceConnection;
+export = ServiceConnection;

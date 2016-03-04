@@ -1,4 +1,4 @@
-import TSService from "./TSService";
+import TSService = require("./TSService");
 
 
 TSService.connect("stdio", (tsservice) => {

@@ -1,6 +1,6 @@
 import proc = require("child_process");
 
-export default class StdIODriver implements IDriver {
+class StdIODriver implements IDriver {
 	tssserver: proc.ChildProcess;
 	connect(done) {
 		this.tssserver = proc.spawn("tsserver");
@@ -17,3 +17,5 @@ export default class StdIODriver implements IDriver {
 		this.tssserver.stdin.write(message);
 	}
 }
+
+export = StdIODriver;

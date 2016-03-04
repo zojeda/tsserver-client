@@ -1,17 +1,23 @@
 import {Observable} from "rxjs";
 
-import WebSocketDriver from "./driver/WebSocketDriver";
-import StdIODriver from "./driver/StdIODriver";
 
-import ServiceConnection from "./ServiceConnection";
+import ServiceConnection = require("./ServiceConnection");
 
 class TSService {
 	seq = 0;
 	static connect(driverName: string, onReady: (service: TSService) => any) {
 		let driver: IDriver;
 		switch (driverName) {
-			case "websocket": driver = new WebSocketDriver();
-			case "stdio": driver = new StdIODriver();
+			case "websocket": {
+				var WebSocketDriver = require("./driver/WebSocketDriver");
+				driver = new WebSocketDriver();
+				break;
+			}
+			// case "stdio": {
+			// 	var StdIODriver = require("./driver/StdIODriver");
+			// 	driver = new StdIODriver();
+			// 	break;
+			// }
 		}
 		let connection = new ServiceConnection(driver, connection => {
 			let service = new TSService(connection);
@@ -92,4 +98,4 @@ class TSService {
 
 }
 
-export default TSService;
+export = TSService;
