@@ -22,8 +22,6 @@ class ServiceConnection {
           expectedBodyLenght = parseInt(matches[1]);
           headerLength = matches[0].length;
         }
-        console.log("message[%d] | partialMessage[%d] | headerLength[%d] | bodylength[%d]",
-          message.length, partialMessage.length, headerLength, expectedBodyLenght);
         if ((message.length + partialMessage.length) == (expectedBodyLenght + headerLength)) {
           let completeMsg = (partialMessage + message).substring(headerLength);
           let msg: ts.server.protocol.Message = JSON.parse(completeMsg);

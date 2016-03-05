@@ -1,6 +1,4 @@
 import {Observable} from "rxjs";
-
-
 import ServiceConnection = require("./ServiceConnection");
 
 class TSService {
@@ -38,6 +36,7 @@ class TSService {
 		};
 		this.connection.sendRequest(openRequest);
 	}
+
 	projectInfo(file: string, needFileNameList: boolean): Promise<ts.server.protocol.ProjectInfo> {
 		let projectInfoRequest: ts.server.protocol.ProjectInfoRequest = {
 			command: "projectInfo",
@@ -67,6 +66,22 @@ class TSService {
 		return this.connection.sendRequestResp(completionsRequest);
 	}
 
+	completionEntryDetails(file: string, line: number, offset: number, entryNames: string[]): Promise<ts.server.protocol.CompletionEntryDetails[]> {
+		let completionDetailsRequest: ts.server.protocol.CompletionDetailsRequest = {
+			command: "completionEntryDetails",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset,
+				entryNames: entryNames
+			}
+		};
+
+		return this.connection.sendRequestResp(completionDetailsRequest);
+	}
+
 	geterr(files: string[], delay: number) : Observable<ts.server.protocol.Diagnostic[]> {
 		let geterrRequest: ts.server.protocol.GeterrRequest = {
 			command: "geterr",
@@ -82,6 +97,112 @@ class TSService {
 		return this.connection.semanticEventsSuject.asObservable();
 	}
 
+	navto(file: string, searchValue: string, maxResultCount?: number): Promise<ts.server.protocol.NavtoItem[]> {
+		let navtoRequest: ts.server.protocol.NavtoRequest = {
+			command: "navto",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				searchValue: searchValue,
+				maxResultCount: maxResultCount
+			}
+		};
+
+		return this.connection.sendRequestResp(navtoRequest);
+	}
+
+	definition(file: string, line: number, offset: number): Promise<ts.server.protocol.FileSpan[]> {
+		let definitionRequest: ts.server.protocol.DefinitionRequest = {
+			command: "definition",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset
+			}
+		};
+
+		return this.connection.sendRequestResp(definitionRequest);
+	}
+
+	definitionType(file: string, line: number, offset: number): Promise<ts.server.protocol.FileSpan[]> {
+		let typeDefinitionRequest: ts.server.protocol.TypeDefinitionRequest = {
+			command: "typeDefinition",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset
+			}
+		};
+
+		return this.connection.sendRequestResp(typeDefinitionRequest);
+	}
+
+	rename(file: string, line: number, offset: number, findInComments?: boolean, findInStrings?: boolean): Promise<ts.server.protocol.RenameResponseBody> {
+		let typeDefinitionRequest: ts.server.protocol.RenameRequest = {
+			command: "rename",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset,
+				findInComments: findInComments,
+				findInStrings: findInStrings
+			}
+		};
+
+		return this.connection.sendRequestResp(typeDefinitionRequest);
+	}
+
+	references(file: string, line: number, offset: number): Promise<ts.server.protocol.ReferencesResponseBody> {
+		let referencesRequest: ts.server.protocol.ReferencesRequest = {
+			command: "references",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset
+			}
+		};
+
+		return this.connection.sendRequestResp(referencesRequest);
+	}
+
+	signatureHelp(file: string, line: number, offset: number): Promise<ts.server.protocol.SignatureHelpItems> {
+		let signatureHelpRequest: ts.server.protocol.SignatureHelpRequest = {
+			command: "signatureHelp",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset
+			}
+		};
+
+		return this.connection.sendRequestResp(signatureHelpRequest);
+	}
+
+	quickinfo(file: string, line: number, offset: number): Promise<ts.server.protocol.QuickInfoResponseBody> {
+		let referencesRequest: ts.server.protocol.QuickInfoRequest = {
+			command: "quickinfo",
+			type: "request",
+			seq: this.increase_seq(),
+			arguments: {
+				file: file,
+				line: line,
+				offset: offset
+			}
+		};
+
+		return this.connection.sendRequestResp(referencesRequest);
+	}	
 	exit() {
 		let exitRequest: ts.server.protocol.ExitRequest = {
 			command: "exit",

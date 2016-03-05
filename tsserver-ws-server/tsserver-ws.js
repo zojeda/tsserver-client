@@ -8,7 +8,11 @@ var server = ws.createServer(function (conn) {
     console.log("New connection")
     tsserver.stdout.on('data', function(data) {
       console.log("Sending "+data)
-      conn.sendText(data);
+      try {
+        conn.sendText(data);
+      } catch(e) {
+        console.error("connection closed");
+      }
     });
     conn.on("text", function (str) {
         console.log("Received "+str)
