@@ -2,10 +2,6 @@ import {Observable, Subject} from "rxjs";
 
 
 require("es6-promise").Promise;
-interface PromiseExecutor<T> {
-  resolver: (resp: T) => void;
-  reject: (error: Error) => void;
-}
 
 
 class ServiceConnection {
@@ -28,12 +24,14 @@ class ServiceConnection {
           switch (msg.type) {
             case "response": {
               let response = msg as ts.server.protocol.Response;
-              let promiseExecutor = this.callbacks[response.request_seq];
-              if (promiseExecutor) {
+              let responseSubject = this.reqResponseSubjects[response.request_seq];
+              if (responseSubject) {
                 if (response.success) {
-                  promiseExecutor.resolver(response.body);
+                  responseSubject.next(response.body);
+                  responseSubject.complete();
+                  delete this.reqResponseSubjects[response.request_seq];
                 } else {
-                  promiseExecutor.reject(new Error(response.message));
+                  responseSubject.error(response.message);
                 }
                 break;
               } else {
@@ -45,8 +43,6 @@ class ServiceConnection {
               if (event.event === "semanticDiag") {
                 let diagEvent = event as ts.server.protocol.DiagnosticEvent;
                 this.semanticEventsSuject.next((diagEvent.body.diagnostics as ts.server.protocol.Diagnostic[]));
-                this.semanticEventsSuject.complete();
-                this.semanticEventsSuject = new Subject<ts.server.protocol.Diagnostic[]>();
               }
               break;
             }
@@ -60,36 +56,28 @@ class ServiceConnection {
     });
   }
 
-  sendRequest<Resp extends ts.server.protocol.Response>(request: ts.server.protocol.Request) {
+  sendRequest(request: ts.server.protocol.Request) {
     this.driver.send(JSON.stringify(request) + "\n");
   }
 
-  sendRequestResp<Resp>(request: ts.server.protocol.Request): Promise<Resp> {
-    let executor = (resolve, reject) => {
-      this.callbacks[request.seq] = {
-        resolver: (response) => {
-          resolve(response);
-          this.clear(request.seq);
-        },
-        reject: reject //passing the reject callback in case an error informed by the server
-      };
-      setTimeout(()=>{
-      	reject("Timeout");
-      	this.clear(request.seq);}
-      , 2000);
-    };
+  subscribe(request: ts.server.protocol.Request) {
     this.driver.send(JSON.stringify(request) + "\n");
-    return new Promise<Resp>(executor);
+    return this.semanticEventsSuject.asObservable();
   }
 
 
-  private clear(seq: number) {
-    delete this.callbacks[seq];
+  sendRequestResp<Resp>(request: ts.server.protocol.Request): Observable<Resp> {
+    let responseSubject = new Subject<Resp>();
+    this.reqResponseSubjects[request.seq] = responseSubject;
+    this.driver.send(JSON.stringify(request) + "\n");
+    return responseSubject.asObservable();
   }
 
-  private callbacks: { [seq: number]: PromiseExecutor<ts.server.protocol.Response> } = {};
 
-  semanticEventsSuject = new Subject<ts.server.protocol.Diagnostic[]>();
+
+  private reqResponseSubjects : {[sec: number]:  Subject<any>} = {};
+
+  private semanticEventsSuject = new Subject<ts.server.protocol.Diagnostic[]>();
 }
 
 export = ServiceConnection;

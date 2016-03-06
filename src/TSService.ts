@@ -37,7 +37,7 @@ class TSService {
 		this.connection.sendRequest(openRequest);
 	}
 
-	projectInfo(file: string, needFileNameList: boolean): Promise<ts.server.protocol.ProjectInfo> {
+	projectInfo(file: string, needFileNameList: boolean) {
 		let projectInfoRequest: ts.server.protocol.ProjectInfoRequest = {
 			command: "projectInfo",
 			type: "request",
@@ -48,10 +48,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(projectInfoRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.ProjectInfo>(projectInfoRequest);
 	}
 
-	completions(file: string, line: number, offset: number): Promise<ts.server.protocol.CompletionEntry[]> {
+	completions(file: string, line: number, offset: number) {
 		let completionsRequest: ts.server.protocol.CompletionsRequest = {
 			command: "completions",
 			type: "request",
@@ -63,10 +63,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(completionsRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.CompletionEntry[]>(completionsRequest);
 	}
 
-	completionEntryDetails(file: string, line: number, offset: number, entryNames: string[]): Promise<ts.server.protocol.CompletionEntryDetails[]> {
+	completionEntryDetails(file: string, line: number, offset: number, entryNames: string[]) {
 		let completionDetailsRequest: ts.server.protocol.CompletionDetailsRequest = {
 			command: "completionEntryDetails",
 			type: "request",
@@ -79,7 +79,7 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(completionDetailsRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.CompletionEntryDetails[]>(completionDetailsRequest);
 	}
 
 	geterr(files: string[], delay: number) : Observable<ts.server.protocol.Diagnostic[]> {
@@ -93,11 +93,10 @@ class TSService {
 			}
 		};
 
-		this.connection.sendRequest(geterrRequest);
-		return this.connection.semanticEventsSuject.asObservable();
+		return this.connection.subscribe(geterrRequest);
 	}
 
-	navto(file: string, searchValue: string, maxResultCount?: number): Promise<ts.server.protocol.NavtoItem[]> {
+	navto(file: string, searchValue: string, maxResultCount?: number) {
 		let navtoRequest: ts.server.protocol.NavtoRequest = {
 			command: "navto",
 			type: "request",
@@ -109,10 +108,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(navtoRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.NavtoItem[]>(navtoRequest);
 	}
 
-	definition(file: string, line: number, offset: number): Promise<ts.server.protocol.FileSpan[]> {
+	definition(file: string, line: number, offset: number) {
 		let definitionRequest: ts.server.protocol.DefinitionRequest = {
 			command: "definition",
 			type: "request",
@@ -124,10 +123,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(definitionRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.FileSpan[]>(definitionRequest);
 	}
 
-	definitionType(file: string, line: number, offset: number): Promise<ts.server.protocol.FileSpan[]> {
+	definitionType(file: string, line: number, offset: number) {
 		let typeDefinitionRequest: ts.server.protocol.TypeDefinitionRequest = {
 			command: "typeDefinition",
 			type: "request",
@@ -139,10 +138,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(typeDefinitionRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.FileSpan[]>(typeDefinitionRequest);
 	}
 
-	rename(file: string, line: number, offset: number, findInComments?: boolean, findInStrings?: boolean): Promise<ts.server.protocol.RenameResponseBody> {
+	rename(file: string, line: number, offset: number, findInComments?: boolean, findInStrings?: boolean) {
 		let typeDefinitionRequest: ts.server.protocol.RenameRequest = {
 			command: "rename",
 			type: "request",
@@ -156,10 +155,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(typeDefinitionRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.RenameResponseBody>(typeDefinitionRequest);
 	}
 
-	references(file: string, line: number, offset: number): Promise<ts.server.protocol.ReferencesResponseBody> {
+	references(file: string, line: number, offset: number) {
 		let referencesRequest: ts.server.protocol.ReferencesRequest = {
 			command: "references",
 			type: "request",
@@ -171,10 +170,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(referencesRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.ReferencesResponseBody>(referencesRequest);
 	}
 
-	signatureHelp(file: string, line: number, offset: number): Promise<ts.server.protocol.SignatureHelpItems> {
+	signatureHelp(file: string, line: number, offset: number) {
 		let signatureHelpRequest: ts.server.protocol.SignatureHelpRequest = {
 			command: "signatureHelp",
 			type: "request",
@@ -186,10 +185,10 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(signatureHelpRequest);
+		return this.connection.sendRequestResp<ts.server.protocol.SignatureHelpItems>(signatureHelpRequest);
 	}
 
-	quickinfo(file: string, line: number, offset: number): Promise<ts.server.protocol.QuickInfoResponseBody> {
+	quickinfo(file: string, line: number, offset: number) {
 		let referencesRequest: ts.server.protocol.QuickInfoRequest = {
 			command: "quickinfo",
 			type: "request",
@@ -201,8 +200,9 @@ class TSService {
 			}
 		};
 
-		return this.connection.sendRequestResp(referencesRequest);
-	}	
+		return this.connection.sendRequestResp<ts.server.protocol.QuickInfoResponseBody>(referencesRequest);
+	}
+
 	exit() {
 		let exitRequest: ts.server.protocol.ExitRequest = {
 			command: "exit",
