@@ -1,5 +1,6 @@
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
+import {ReplaySubject} from "rxjs/subject/ReplaySubject";
 
 
 require("es6-promise").Promise;
@@ -44,6 +45,7 @@ class ServiceConnection {
               if (event.event === "semanticDiag") {
                 let diagEvent = event as ts.server.protocol.DiagnosticEvent;
                 this.semanticEventsSuject.next((diagEvent.body.diagnostics as ts.server.protocol.Diagnostic[]));
+                this.semanticEventsSuject.complete();
               }
               break;
             }
@@ -61,9 +63,10 @@ class ServiceConnection {
     this.driver.send(JSON.stringify(request) + "\n");
   }
 
-  subscribe(request: ts.server.protocol.Request) {
+  subscribe(request: ts.server.protocol.Request): Observable<ts.server.protocol.Diagnostic[]> {
+    this.semanticEventsSuject = new Subject<ts.server.protocol.Diagnostic[]>();
     this.driver.send(JSON.stringify(request) + "\n");
-    return this.semanticEventsSuject.asObservable();
+    return this.semanticEventsSuject;
   }
 
 
@@ -78,7 +81,7 @@ class ServiceConnection {
 
   private reqResponseSubjects : {[sec: number]:  Subject<any>} = {};
 
-  private semanticEventsSuject = new Subject<ts.server.protocol.Diagnostic[]>();
+  private semanticEventsSuject;
 }
 
 export = ServiceConnection;
