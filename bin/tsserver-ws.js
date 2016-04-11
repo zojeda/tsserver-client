@@ -1,2 +1,2 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 require('../tsserver-ws-server/tsserver-ws')
